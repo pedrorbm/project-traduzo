@@ -7,3 +7,8 @@ class LanguageModel(AbstractModel):
 
     def __init__(self, dict: dict):
         super().__init__(dict)
+
+    def to_dict(self):
+        result = {"name": self.data["name"], "acronym": self.data["acronym"]}
+
+        return result

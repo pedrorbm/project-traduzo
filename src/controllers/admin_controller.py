@@ -4,6 +4,7 @@ from models.history_model import HistoryModel
 from models.user_model import UserModel
 
 admin_controller = Blueprint("admin_controller", __name__)
+# init
 
 
 @admin_controller.route("/history/<id>", methods=["DELETE"])

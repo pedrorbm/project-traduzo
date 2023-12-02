@@ -7,7 +7,7 @@ tradutor_controller = Blueprint("tradutor_controller", __name__)
 
 
 @tradutor_controller.route("/", methods=["GET"])
-def get():
+def get_translate():
     tradutor = {
         "languages": LanguageModel.list_dicts(),
         "text_to_translate": "O que deseja traduzir?",
@@ -22,7 +22,7 @@ def get():
 
 
 @tradutor_controller.route("/", methods=["POST"])
-def post():
+def post_translate():
     tradutor = {
         "languages": LanguageModel.list_dicts(),
         "text_to_translate": request.form["text-to-translate"],
@@ -32,6 +32,24 @@ def post():
             source=request.form["translate-from"],
             target=request.form["translate-to"],
         ).translate(request.form["text-to-translate"]),
+    }
+
+    result = render_template("index.html", **tradutor)
+
+    return result
+
+
+@tradutor_controller.route("/reverse", methods=["POST"])
+def post_reverse():
+    tradutor = {
+        "languages": LanguageModel.list_dicts(),
+        "text_to_translate": GoogleTranslator(
+            source=request.form["translate-from"],
+            target=request.form["translate-to"],
+        ).translate(request.form["text-to-translate"]),
+        "translate_from": request.form["translate-to"],
+        "translate_to": request.form["translate-from"],
+        "translated": request.form["text-to-translate"],
     }
 
     result = render_template("index.html", **tradutor)

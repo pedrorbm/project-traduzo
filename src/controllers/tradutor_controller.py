@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 from models.language_model import LanguageModel
 from flask import request
 from deep_translator import GoogleTranslator
+from models.history_model import HistoryModel
 
 tradutor_controller = Blueprint("tradutor_controller", __name__)
 
@@ -15,6 +16,12 @@ def get_translate():
         "translate_to": "en",
         "translated": "What do you want to translate?",
     }
+
+    HistoryModel({
+        "text_to_translate": tradutor["text_to_translate"],
+        "translate_from": tradutor["translate_from"],
+        "translate_to": tradutor["translate_to"],
+    }).save()
 
     result = render_template("index.html", **tradutor)
 
@@ -34,6 +41,12 @@ def post_translate():
         ).translate(request.form["text-to-translate"]),
     }
 
+    HistoryModel({
+        "text_to_translate": tradutor["text_to_translate"],
+        "translate_from": tradutor["translate_from"],
+        "translate_to": tradutor["translate_to"],
+    }).save()
+
     result = render_template("index.html", **tradutor)
 
     return result
@@ -51,6 +64,12 @@ def post_reverse():
         "translate_to": request.form["translate-from"],
         "translated": request.form["text-to-translate"],
     }
+
+    HistoryModel({
+        "text_to_translate": tradutor["text_to_translate"],
+        "translate_from": tradutor["translate_from"],
+        "translate_to": tradutor["translate_to"],
+    }).save()
 
     result = render_template("index.html", **tradutor)
 
